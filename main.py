@@ -34,7 +34,7 @@ class Car(pygame.sprite.Sprite):
         self.pos_move = 0
 
 
-class Pipe(pygame.sprite.Sprite):
+class Collider(pygame.sprite.Sprite):
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -76,9 +76,9 @@ car_group = pygame.sprite.Group()
 car = Car()
 car_group.add(car)
 
-pipe_group = pygame.sprite.Group()
-pipe = Pipe()
-pipe_group.add(pipe)
+collider_group = pygame.sprite.Group()
+collider = Collider()
+collider_group.add(collider)
 
 road_group = pygame.sprite.Group()
 for i in range(2):
@@ -114,19 +114,19 @@ while game:
         new_road = Road(screen_height)
         road_group.add(new_road)
 
-    if off_screen(pipe_group.sprites()[0]):
-        pipe_group.remove(pipe_group.sprites()[0])
+    if off_screen(collider_group.sprites()[0]):
+        collider_group.remove(collider_group.sprites()[0])
 
-        new_pipe = Pipe()
-        pipe_group.add(new_pipe)
+        new_collider = Collider()
+        collider_group.add(new_collider)
 
     road_group.update()
     car_group.update()
-    pipe_group.update()
+    collider_group.update()
 
     road_group.draw(screen)
     car_group.draw(screen)
-    pipe_group.draw(screen)
+    collider_group.draw(screen)
 
     pygame.display.update()
 
