@@ -39,15 +39,16 @@ class Collider(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.image.load('images/car2.png').convert_alpha()
+        self.image = pygame.image.load('images/car2.png')
+        self.mask = pygame.mask.from_surface(self.image)
 
         self.rect = self.image.get_rect()
-        self.rect[1] = -100
-        self.rect[0] = randint(100, 400)
+        self.rect[1] = randint(-1000, -100)
+        self.rect[0] = randint(20, 490)
         self.rect[3] = 600
 
     def update(self):
-        self.rect[1] += 10
+        self.rect[1] += 12
 
 
 class Road(pygame.sprite.Sprite):
@@ -57,6 +58,7 @@ class Road(pygame.sprite.Sprite):
 
         self.image = pygame.image.load('images/road.png')
         self.image = pygame.transform.scale(self.image, (screen_width, ground_height))
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect[1] = -y_pos
 
@@ -84,6 +86,10 @@ road_group = pygame.sprite.Group()
 for i in range(2):
     road = Road(screen_height * i)
     road_group.add(road)
+
+for c in range(20):
+    collider = Collider()
+    collider_group.add(collider)
 
 clock = pygame.time.Clock()
 
@@ -127,6 +133,9 @@ while game:
     road_group.draw(screen)
     car_group.draw(screen)
     collider_group.draw(screen)
+
+    if pygame.sprite.groupcollide(car_group, collider_group, False, False, collided=pygame.sprite.collide_mask):
+        game = False
 
     pygame.display.update()
 
