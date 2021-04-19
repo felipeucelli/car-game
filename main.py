@@ -1,5 +1,5 @@
 import pygame
-from random import randint
+from random import randint, randrange
 
 screen_width = 520
 screen_height = 600
@@ -39,12 +39,16 @@ class Collider(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.image.load('images/car2.png')
+        if randint(0, 9) % 2 == 0:
+            self.image = pygame.image.load('images/car2.png')
+        else:
+            self.image = pygame.image.load('images/car3.png')
+
         self.mask = pygame.mask.from_surface(self.image)
 
         self.rect = self.image.get_rect()
-        self.rect[1] = randint(-1000, -100)
-        self.rect[0] = randint(20, 490)
+        self.rect[1] = randrange(-1000, 0, 80)
+        self.rect[0] = randrange(20, 490, 40)
         self.rect[3] = 600
 
     def update(self):
