@@ -23,12 +23,17 @@ class Car(pygame.sprite.Sprite):
 
     def update(self):
         self.rect[0] += self.pos_move
+        print(self.rect[0])
+        if self.rect[0] <= 10 or self.rect[0] >= 490:
+            self.pos_move = 0
 
     def move_left(self):
-        self.pos_move = -5
+        if self.rect[0] > 10:
+            self.pos_move = -5
 
     def move_right(self):
-        self.pos_move = 5
+        if self.rect[0] < 490:
+            self.pos_move = 5
 
     def freeze(self):
         self.pos_move = 0
@@ -132,11 +137,11 @@ while game:
 
     road_group.update()
     car_group.update()
-    collider_group.update()
+    #collider_group.update()
 
     road_group.draw(screen)
     car_group.draw(screen)
-    collider_group.draw(screen)
+    #collider_group.draw(screen)
 
     if pygame.sprite.groupcollide(car_group, collider_group, False, False, collided=pygame.sprite.collide_mask):
         game = False
