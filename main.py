@@ -137,11 +137,11 @@ while game:
 
     road_group.update()
     car_group.update()
-    #collider_group.update()
+    collider_group.update()
 
     road_group.draw(screen)
     car_group.draw(screen)
-    #collider_group.draw(screen)
+    collider_group.draw(screen)
 
     if pygame.sprite.groupcollide(car_group, collider_group, False, False, collided=pygame.sprite.collide_mask):
         game = False
