@@ -51,7 +51,13 @@ def start():
                     car.move_right()
 
                 if event.key == pygame.K_DOWN:
-                    car.freeze()
+                    car.move_back()
+
+                if event.key == pygame.K_UP:
+                    car.move_on()
+
+            if event.type == pygame.KEYUP:
+                car.freeze()
 
         screen.blit(screen, (0, 0))
 
