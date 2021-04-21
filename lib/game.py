@@ -34,22 +34,34 @@ class Game:
             self.collider_group.add(self.collider)
 
         self.main_loop = True
+        self.start_loop = True
+        self. game_over_loop = True
+
+        self.score = 0
 
         self.clock = pygame.time.Clock()
+
+        self.score_font = pygame.font.SysFont('Arial', 30)
 
     @staticmethod
     def off_screen(sprite):
         return sprite.rect[1] > sprite.rect[3]
 
-    def start(self):
+    def start_game(self):
         while self.main_loop:
             self.clock.tick(30)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.main_loop = False
+                    self.start_loop = False
+                    self.game_over_loop = False
+                    break
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.main_loop = False
+                        self.start_loop = False
+                        self.game_over_loop = False
+                        break
                     if event.key == pygame.K_LEFT:
                         self.car.move_left()
                     if event.key == pygame.K_RIGHT:
@@ -74,6 +86,7 @@ class Game:
 
                 new_collider = Collider()
                 self.collider_group.add(new_collider)
+                self.score += 1
 
             self.road_group.update()
             self.car_group.update()
@@ -85,8 +98,53 @@ class Game:
 
             if pygame.sprite.groupcollide(self.car_group, self.collider_group, False, False,
                                           collided=pygame.sprite.collide_mask):
-                self.main_loop = False
+                self.game_over()
+
+            score_text = self.score_font.render('SCORE: ' + str(self.score), True, (0, 0, 0))
+            self.screen.blit(score_text, (10, 5))
 
             pygame.display.update()
+
+    def start(self):
+        font = pygame.font.SysFont('Arial', 40)
+        text = font.render('Press SPACE to start', True, (225, 225, 255))
+        self.screen.blit(text, (70, 200))
+        pygame.display.update()
+        while self.start_loop:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.start_loop = False
+                    break
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.start_loop = False
+                        break
+                    if event.key == pygame.K_SPACE:
+                        self.main_loop = True
+                        self.start_game()
+
+    def game_over(self):
+        font = pygame.font.SysFont('Arial', 40)
+        text = font.render('Gamer Over', True, (255, 0, 0))
+        self.screen.blit(text, (150, 200))
+
+        score_text = self.score_font.render('SCORE: ' + str(self.score), True, (0, 0, 0))
+        self.screen.blit(score_text, (10, 5))
+
+        pygame.display.update()
+        while self.game_over_loop:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.start_loop = False
+                    self.main_loop = False
+                    self.game_over_loop = False
+                    break
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.start_loop = False
+                        self.main_loop = False
+                        self.game_over_loop = False
+                        break
+        pygame.display.update()
 
     pygame.quit()
