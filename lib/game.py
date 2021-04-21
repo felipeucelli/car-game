@@ -29,7 +29,7 @@ class Game:
             self.road = Road(self.screen_height * i)
             self.road_group.add(self.road)
 
-        for c in range(20):
+        for c in range(10):
             self.collider = Collider()
             self.collider_group.add(self.collider)
 
@@ -48,8 +48,10 @@ class Game:
         return sprite.rect[1] > sprite.rect[3]
 
     def start_game(self):
+        level = 30
+        pseudo_level = 0
         while self.main_loop:
-            self.clock.tick(30)
+            self.clock.tick(level)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.main_loop = False
@@ -87,6 +89,8 @@ class Game:
                 new_collider = Collider()
                 self.collider_group.add(new_collider)
                 self.score += 1
+                if self.score <= 300:
+                    pseudo_level += 1
 
             self.road_group.update()
             self.car_group.update()
@@ -102,6 +106,10 @@ class Game:
 
             score_text = self.score_font.render('SCORE: ' + str(self.score), True, (0, 0, 0))
             self.screen.blit(score_text, (10, 5))
+
+            if pseudo_level == 50 and self.score <= 300:
+                level += 5
+                pseudo_level = 0
 
             pygame.display.update()
 
