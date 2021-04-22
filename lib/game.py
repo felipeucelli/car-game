@@ -1,4 +1,7 @@
 import pygame
+import sys
+import os
+
 from .car import Car
 from .collider import Collider
 from .road import Road
@@ -133,8 +136,10 @@ class Game:
 
     def game_over(self):
         font = pygame.font.SysFont('Arial', 40)
-        text = font.render('Gamer Over', True, (255, 0, 0))
-        self.screen.blit(text, (150, 200))
+        text_1 = font.render('Gamer Over', True, (255, 0, 0))
+        text_2 = font.render('Press SPACE to start again', True, (0, 0, 0))
+        self.screen.blit(text_1, (150, 200))
+        self.screen.blit(text_2, (20, 300))
 
         score_text = self.score_font.render('SCORE: ' + str(self.score), True, (0, 0, 0))
         self.screen.blit(score_text, (10, 5))
@@ -153,6 +158,14 @@ class Game:
                         self.main_loop = False
                         self.game_over_loop = False
                         break
+                    if event.key == pygame.K_SPACE:
+                        self.restart()
+
         pygame.display.update()
+
+    @staticmethod
+    def restart():
+        python = sys.executable
+        os.execl(python, python, * sys.argv)
 
     pygame.quit()
